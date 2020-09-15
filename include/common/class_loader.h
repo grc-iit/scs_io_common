@@ -2,8 +2,8 @@
 // Created by mani on 9/14/2020.
 //
 
-#ifndef RHEA_CLASS_LOADER_H
-#define RHEA_CLASS_LOADER_H
+#ifndef COMMON_CLASS_LOADER_H
+#define COMMON_CLASS_LOADER_H
 
 
 class class_loader {
@@ -11,4 +11,4 @@ class class_loader {
 };
 
 
-#endif //RHEA_CLASS_LOADER_H
+#endif //COMMON_CLASS_LOADER_H
