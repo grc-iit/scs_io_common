@@ -20,7 +20,7 @@ namespace symbios {
     class ConfigurationManager {
 
     private:
-        /*static std::string replaceEnvVariable(std::string temp_variable){
+        static std::string replaceEnvVariable(std::string temp_variable){
 
             std::string pattern("(\\$\\{.*?\\})");
             auto regexp = regex(pattern);
@@ -102,9 +102,9 @@ namespace symbios {
 
                 variable.insert(std::pair<uint16_t, std::shared_ptr<StorageSolution>>(i, ss));
             }
-        }*/
+        }
 
-        /*void config(rapidjson::Document &doc, const char *member, DataDistributionPolicy &variable) {
+        void config(rapidjson::Document &doc, const char *member, DataDistributionPolicy &variable) {
             if(!doc.HasMember(member)) return;
             assert(doc[member].IsString());
             std::string distr_string = doc[member].GetString();
@@ -113,9 +113,9 @@ namespace symbios {
             else if(distr_string == "HEURISTICS_POLICY") variable=HEURISTICS_POLICY;
             else if(distr_string == "DYNAMIC_PROGRAMMING_POLICY") variable=DYNAMIC_PROGRAMMING_POLICY;
             else std::cerr << "Incorrect configuration on Data Distribution Policy" << std::endl;
-        }*/
+        }
 
-        /*int CountServers(CharStruct server_list_path) {
+        int CountServers(CharStruct server_list_path) {
             fstream file;
             int total = 0;
             file.open(server_list_path.c_str(), ios::in);
@@ -146,7 +146,7 @@ namespace symbios {
             }
             file.close();
             return total;
-        }*/
+        }
 
     public:
         CharStruct SERVER_LISTS, CLIENT_LISTS;
@@ -157,7 +157,7 @@ namespace symbios {
         uint16_t SERVER_COUNT;
         uint16_t RANDOM_SEED;
         std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>> STORAGE_SOLUTIONS;
-        //DataDistributionPolicy DATA_DISTRIBUTION_POLICY;
+        DataDistributionPolicy DATA_DISTRIBUTION_POLICY;
         CharStruct JOB_PATH;
 
 
@@ -170,7 +170,7 @@ namespace symbios {
                                  SERVER_COUNT(1),
                                  RANDOM_SEED(100),
                                  STORAGE_SOLUTIONS(),
-                                 //DATA_DISTRIBUTION_POLICY(DataDistributionPolicy::RANDOM_POLICY),
+                                 DATA_DISTRIBUTION_POLICY(DataDistributionPolicy::RANDOM_POLICY),
                                  JOB_PATH("/home/yejie/CLionProjects/scs_io_common/cmake-build-debug/test/unit/libjob.so"){
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
             STORAGE_SOLUTIONS.insert({1, std::make_shared<RedisSS>("127.0.0.1", "6379") });
@@ -178,7 +178,7 @@ namespace symbios {
 
         }
 
-        /*void LoadConfiguration() {
+        void LoadConfiguration() {
             using namespace rapidjson;
 
             FILE *outfile = fopen(CONFIGURATION_FILE.c_str(), "r");
@@ -222,7 +222,7 @@ namespace symbios {
             BASKET_CONF->ConfigureDefaultServer(SERVER_LISTS.c_str());
             SERVER_COUNT = BASKET_CONF->NUM_SERVERS;
             BASKET_CONF->RPC_PORT = SYMBIOS_PORT;
-        }*/
+        }
     };
 }
 #endif //COMMON_CONFIGURATION_MANAGER_H
