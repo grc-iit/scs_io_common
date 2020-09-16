@@ -202,7 +202,8 @@ namespace symbios {
             config(doc, "SERVER_DIR", SERVER_DIR);
             config(doc, "RANDOM_SEED", RANDOM_SEED);
             config(doc, "STORAGE_SOLUTIONS", STORAGE_SOLUTIONS);
-            //config(doc, "DATA_DISTRIBUTION_POLICY", DATA_DISTRIBUTION_POLICY);
+            config(doc, "DATA_DISTRIBUTION_POLICY", DATA_DISTRIBUTION_POLICY);
+            config(doc,"JOB_PATH", JOB_PATH);
             boost::filesystem::create_directories(SERVER_DIR.c_str());
 
             fclose(outfile);
