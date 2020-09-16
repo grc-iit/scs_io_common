@@ -8,6 +8,7 @@
 
 #include <basket/common/data_structures.h>
 #include <rpc/msgpack.hpp>
+#include <common/enumerations.h>
 #include <iostream>
 
 typedef struct Data{
@@ -108,6 +109,7 @@ typedef struct Job{
 
     Job(){}
     std::shared_ptr<Task> GetTask(uint32_t task_id_){
+        printf("Begin to create Task....\n");
         return std::shared_ptr<Task>(new Task());
     }
 
@@ -116,53 +118,54 @@ typedef struct Job{
     }
 
     void test(){
-        std::cout << "Test method...." << std::endl;
+        //std::cout << "Test method...." << std::endl;
+        printf("Test Job's test function....\n");
     }
 
 }Job;
 
-//typedef struct DataDistribution{
-//    Data source_data_; // memory buffer for write and file buffer for read
-//    Data destination_data_; // file info for write and memory info for read
-//    uint16_t storage_index_; // native io client type
-//
-//    /*Define the default, copy and move constructor*/
-//    DataDistribution(): storage_index_(), destination_data_(), source_data_(){}
-//    DataDistribution(const DataDistribution &other): source_data_(other.source_data_),
-//                                                     destination_data_(other.destination_data_), storage_index_(other.storage_index_){}
-//    DataDistribution(DataDistribution &other): source_data_(other.source_data_),
-//                                               destination_data_(other.destination_data_), storage_index_(other.storage_index_){}
-//
-//    /*Define Assignment Operator*/
-//    DataDistribution &operator=(const DataDistribution &other){
-//        source_data_ = other.source_data_;
-//        destination_data_ = other.destination_data_;
-//        storage_index_ = other.storage_index_;
-//        return *this;
-//    }
-//} DataDistribution;
-//
-//typedef struct Metadata{
-//    bool is_link_;
-//    uint16_t storage_index_;
-//    std::unordered_map<int64_t , Data> links_;
-//    /*Define the default, copy and move constructor*/
-//    Metadata(): is_link_(), links_(),storage_index_(){}
-//    Metadata(const Metadata &other): is_link_(other.is_link_),
-//                                     links_(other.links_),
-//                                     storage_index_(other.storage_index_){}
-//    Metadata(Metadata &other): is_link_(other.is_link_),
-//                               links_(other.links_),
-//                               storage_index_(other.storage_index_){}
-//
-//    /*Define Assignment Operator*/
-//    Metadata &operator=(const Metadata &other){
-//        is_link_ = other.is_link_;
-//        links_ = other.links_;
-//        storage_index_=other.storage_index_;
-//        return *this;
-//    }
-//} Metadata;
+typedef struct DataDistribution{
+   Data source_data_; // memory buffer for write and file buffer for read
+   Data destination_data_; // file info for write and memory info for read
+   uint16_t storage_index_; // native io client type
+
+   /*Define the default, copy and move constructor*/
+   DataDistribution(): storage_index_(), destination_data_(), source_data_(){}
+   DataDistribution(const DataDistribution &other): source_data_(other.source_data_),
+                                                    destination_data_(other.destination_data_), storage_index_(other.storage_index_){}
+   DataDistribution(DataDistribution &other): source_data_(other.source_data_),
+                                              destination_data_(other.destination_data_), storage_index_(other.storage_index_){}
+
+   /*Define Assignment Operator*/
+   DataDistribution &operator=(const DataDistribution &other){
+       source_data_ = other.source_data_;
+       destination_data_ = other.destination_data_;
+       storage_index_ = other.storage_index_;
+       return *this;
+   }
+} DataDistribution;
+
+typedef struct Metadata{
+   bool is_link_;
+   uint16_t storage_index_;
+   std::unordered_map<int64_t , Data> links_;
+   /*Define the default, copy and move constructor*/
+   Metadata(): is_link_(), links_(),storage_index_(){}
+   Metadata(const Metadata &other): is_link_(other.is_link_),
+                                    links_(other.links_),
+                                    storage_index_(other.storage_index_){}
+   Metadata(Metadata &other): is_link_(other.is_link_),
+                              links_(other.links_),
+                              storage_index_(other.storage_index_){}
+
+   /*Define Assignment Operator*/
+   Metadata &operator=(const Metadata &other){
+       is_link_ = other.is_link_;
+       links_ = other.links_;
+       storage_index_=other.storage_index_;
+       return *this;
+   }
+} Metadata;
 
 #include <rpc/msgpack.hpp>
 namespace clmdep_msgpack {
