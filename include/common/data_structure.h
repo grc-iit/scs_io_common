@@ -8,6 +8,7 @@
 
 #include <basket/common/data_structures.h>
 #include <rpc/msgpack.hpp>
+#include <common/enumerations.h>
 #include <iostream>
 
 typedef struct Data{
@@ -96,26 +97,28 @@ typedef struct MongoSS: public StorageSolution{
     }
 }MongoSS;
 
-typedef struct Job{
-    Job(){}
-    std::shared_ptr<Task> GetTask(uint32_t task_id_){
-        return std::shared_ptr<Task>(new Task());
-    }
-
-    void test(){
-        std::cout << "Test method...." << std::endl;
-    }
-
-}Job;
-
 typedef struct Task{
     Task(){}
 
     void execute(){
-        std::cout << "Test task's execute function...." << std::end;
+        //std::cout << "Test task's execute function...." << std::endl;
+        printf("Test task's execute function....\n");
     }
 }Task;
 
+typedef struct Job{
+    Job(){}
+    std::shared_ptr<Task> GetTask(uint32_t task_id_){
+        printf("Begin to create Task....\n");
+        return std::shared_ptr<Task>(new Task());
+    }
+
+    void test(){
+        //std::cout << "Test method...." << std::endl;
+        printf("Test Job's test function....\n");
+    }
+
+}Job;
 
 
 //typedef struct DataDistribution{
