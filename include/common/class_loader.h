@@ -6,6 +6,7 @@
 #define COMMON_CLASS_LOADER_H
 
 #include <basket/common/singleton.h>
+#include <common/data_structure.h>
 
 class ClassLoader {
 public:
