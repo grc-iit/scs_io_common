@@ -4,7 +4,7 @@
 
 #ifndef COMMON_HDF5_H
 #define COMMON_HDF5_H
-
+#ifdef ENABLE_HDF5_INTERCEPTION
 #include <common/interceptor/interceptor.h>
 #include <hdf5.h>
 
@@ -30,5 +30,5 @@ herr_t H5Dread(hid_t dataset_id, hid_t mem_type_id, hid_t mem_space_id, hid_t fi
 herr_t H5Dclose(hid_t dataset_id);
 herr_t H5Sclose(hid_t space_id);
 herr_t H5Fclose(hid_t file_id);
-
+#endif
 #endif //COMMON_HDF5_H

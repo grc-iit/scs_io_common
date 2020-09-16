@@ -2,20 +2,11 @@
 // Created by Jie on 8/25/20.
 //
 
-#include <common/debug.h>
-#include <basket/common/singleton.h>
-#include <bsoncxx/builder/stream/document.hpp>
-#include <bsoncxx/builder/stream/helpers.hpp>
-#include <common/debug.h>
-#include <cstring>
-#include <mongocxx/exception/bulk_write_exception.hpp>
-#include <mongocxx/exception/query_exception.hpp>
-#include <string>
-#include <common/configuration_manager.h>
-#include <common/error_codes.h>
+
 #include <common/io_clients/mongo_io.h>
 
 void MongoIOClient::Read(Data &source, Data &destination) {
+#ifdef ENABLE_MONGO_CLIENT
   AUTO_TRACER("MongoIOClient::Read", source, destination);
 mongocxx::collection file = client[mongo_solution->database_.c_str()].collection(
             mongo_solution->collection_.c_str());
@@ -35,9 +26,11 @@ mongocxx::collection file = client[mongo_solution->database_.c_str()].collection
         throw ErrorException(READ_MONGODB_DATA_FAILED);
     }
     COMMON_DBGVAR(destination);
+#endif
 }
 
 void MongoIOClient::Write(Data &source, Data &destination) {
+#ifdef ENABLE_MONGO_CLIENT
     AUTO_TRACER("MongoIOClient::Write", source,destination);
     mongocxx::collection file = client[mongo_solution->database_.c_str()].collection(
             mongo_solution->collection_.c_str());
@@ -92,18 +85,22 @@ void MongoIOClient::Write(Data &source, Data &destination) {
         bsoncxx::oid id = add->inserted_id().get_oid().value;
         COMMON_DBGVAR(id.to_string());
     } else std::cout << "Inserted id was not an OID type" << "\n";
+#endif
 }
 
 bool MongoIOClient::Remove(Data &source) {
+#ifdef ENABLE_MONGO_CLIENT
     AUTO_TRACER("MongoIOClient::Remove", source);
     mongocxx::collection file = client[mongo_solution->database_.c_str()].collection(
             mongo_solution->collection_.c_str());
     file.delete_many(bsoncxx::builder::basic::make_document(
             bsoncxx::builder::basic::kvp("key", std::string(source.id_.c_str()))));
     return true;
+#endif
 }
 
 size_t MongoIOClient::Size(Data &source) {
+#ifdef ENABLE_MONGO_CLIENT
     bool exists = false;
     Data read_source;
     try {
@@ -113,4 +110,5 @@ size_t MongoIOClient::Size(Data &source) {
     } catch (const std::exception &e) {
        return 0;
     }
+#endif
 }

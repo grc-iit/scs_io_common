@@ -7,7 +7,7 @@
 #define _XOPEN_SOURCE 500
 #define _GNU_SOURCE
 
-
+#ifdef ENABLE_MPI_INTERCEPTION
 int MPI_File_open(MPI_Comm comm, char *filename, int amode, MPI_Info info, MPI_File *fh){
     MAP_OR_FAIL(PMPI_File_open);
     return __real_PMPI_File_open(comm, filename, amode, info, fh);
@@ -148,3 +148,4 @@ int MPI_File_close(MPI_File *fh){
     MAP_OR_FAIL(PMPI_File_close);
     return __real_PMPI_File_close(fh);
 }
+#endif

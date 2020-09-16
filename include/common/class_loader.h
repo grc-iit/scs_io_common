@@ -9,16 +9,20 @@
 #include <common/data_structure.h>
 #include <dlfcn.h>
 #include <common/configuration_manager.h>
-#include <sentinel/common/data_structures.h>
+#include <common/data_structures.h>
 #include <common/error_codes.h>
 
 class ClassLoader {
 public:
     ClassLoader(){}
 
-    void Load();
+    template<typename T>
+    std::shared_ptr<T> LoadClass(uint32_t class_id_);
 
-    std::shared_ptr<Job> LoadJob(uint32_t job_id_);
+    template<typename T>
+    std::shared_ptr<T> LoadClass(uint32_t class_id_);
+
+    std::shared_ptr<Job> LoadJob();
 
     std::shared_ptr<Task> LoadTask(uint32_t job_id_, uint32_t task_id_);
 
