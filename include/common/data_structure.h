@@ -97,32 +97,6 @@ typedef struct MongoSS: public StorageSolution{
     }
 }MongoSS;
 
-typedef struct Task{
-    Task(){}
-
-    void execute(){
-        std::cout << "Test task's execute function...." << std::endl;
-    }
-}Task;
-
-typedef struct Job{
-
-    Job(){}
-    std::shared_ptr<Task> GetTask(uint32_t task_id_){
-        printf("Begin to create Task....\n");
-        return std::shared_ptr<Task>(new Task());
-    }
-
-    uint32_t GetNextTaskId(uint32_t task_id_){
-        return task_id + 1;
-    }
-
-    void test(){
-        //std::cout << "Test method...." << std::endl;
-        printf("Test Job's test function....\n");
-    }
-
-}Job;
 
 typedef struct DataDistribution{
    Data source_data_; // memory buffer for write and file buffer for read

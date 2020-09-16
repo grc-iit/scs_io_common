@@ -7,6 +7,10 @@
 
 #include <basket/common/singleton.h>
 #include <common/data_structure.h>
+#include <dlfcn.h>
+#include <common/configuration_manager.h>
+#include <sentinel/common/data_structures.h>
+#include <common/error_codes.h>
 
 class ClassLoader {
 public:
