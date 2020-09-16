@@ -7,7 +7,6 @@
 
 #include <basket/common/singleton.h>
 
-
 class ClassLoader {
 public:
     ClassLoader(){}

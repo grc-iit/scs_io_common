@@ -8,6 +8,7 @@
 
 #include <basket/common/data_structures.h>
 #include <rpc/msgpack.hpp>
+#include <iostream>
 
 typedef struct Data{
     CharStruct id_; // for file io, the "id_" is the filename; for object store io, the "id_" is the key.
@@ -94,6 +95,27 @@ typedef struct MongoSS: public StorageSolution{
         return *this;
     }
 }MongoSS;
+
+typedef struct Job{
+    Job(){}
+    std::shared_ptr<Task> GetTask(uint32_t task_id_){
+        return std::shared_ptr<Task>(new Task());
+    }
+
+    void test(){
+        std::cout << "Test method...." << std::endl;
+    }
+
+}Job;
+
+typedef struct Task{
+    Task(){}
+
+    void execute(){
+        std::cout << "Test task's execute function...." << std::end;
+    }
+}Task;
+
 
 
 //typedef struct DataDistribution{
