@@ -13,10 +13,10 @@
 #include <rapidjson/reader.h>
 #include <regex>
 #include <boost/filesystem/operations.hpp>
-//#include <common/error_codes.h>
+#include <common/error_codes.h>
 
-#define COMMON_CONF basket::Singleton<symbios::ConfigurationManager>::GetInstance()
-namespace symbios {
+#define COMMON_CONF basket::Singleton<common::ConfigurationManager>::GetInstance()
+namespace common {
     class ConfigurationManager {
 
     private:
@@ -104,17 +104,6 @@ namespace symbios {
             }
         }
 
-        void config(rapidjson::Document &doc, const char *member, DataDistributionPolicy &variable) {
-            if(!doc.HasMember(member)) return;
-            assert(doc[member].IsString());
-            std::string distr_string = doc[member].GetString();
-            if(distr_string == "RANDOM_POLICY") variable=RANDOM_POLICY;
-            else if(distr_string == "ROUND_ROBIN_POLICY") variable=ROUND_ROBIN_POLICY;
-            else if(distr_string == "HEURISTICS_POLICY") variable=HEURISTICS_POLICY;
-            else if(distr_string == "DYNAMIC_PROGRAMMING_POLICY") variable=DYNAMIC_PROGRAMMING_POLICY;
-            else std::cerr << "Incorrect configuration on Data Distribution Policy" << std::endl;
-        }
-
         int CountServers(CharStruct server_list_path) {
             fstream file;
             int total = 0;
@@ -157,7 +146,6 @@ namespace symbios {
         uint16_t SERVER_COUNT;
         uint16_t RANDOM_SEED;
         std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>> STORAGE_SOLUTIONS;
-        DataDistributionPolicy DATA_DISTRIBUTION_POLICY;
         CharStruct JOB_PATH;
 
 
@@ -170,7 +158,6 @@ namespace symbios {
                                  SERVER_COUNT(1),
                                  RANDOM_SEED(100),
                                  STORAGE_SOLUTIONS(),
-                                 DATA_DISTRIBUTION_POLICY(DataDistributionPolicy::RANDOM_POLICY),
                                  JOB_PATH("/home/yejie/CLionProjects/scs_io_common/cmake-build-debug/test/unit/libjob.so"){
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
             STORAGE_SOLUTIONS.insert({1, std::make_shared<RedisSS>("127.0.0.1", "6379") });
@@ -202,7 +189,6 @@ namespace symbios {
             config(doc, "SERVER_DIR", SERVER_DIR);
             config(doc, "RANDOM_SEED", RANDOM_SEED);
             config(doc, "STORAGE_SOLUTIONS", STORAGE_SOLUTIONS);
-            config(doc, "DATA_DISTRIBUTION_POLICY", DATA_DISTRIBUTION_POLICY);
             config(doc,"JOB_PATH", JOB_PATH);
             boost::filesystem::create_directories(SERVER_DIR.c_str());
 

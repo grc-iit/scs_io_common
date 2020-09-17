@@ -6,6 +6,7 @@
 #define COMMON_MPI_H
 
 #include <common/interceptor/interceptor.h>
+#ifdef ENABLE_MPI_INTERCEPTION
 #include <mpi.h>
 
 FORWARD_DECL(PMPI_File_open, int, (MPI_Comm comm, char *filename, int amode, MPI_Info info, MPI_File *fh));
@@ -65,5 +66,5 @@ int MPI_File_iwrite_shared(MPI_File fh, void * buf, int count, MPI_Datatype data
 int MPI_File_sync(MPI_File fh);
 int MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, char *datarep, MPI_Info info);
 int MPI_File_close(MPI_File *fh);
-
+#endif
 #endif //COMMON_MPI_H

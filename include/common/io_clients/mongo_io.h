@@ -7,6 +7,18 @@
 #define COMMON_MONGO_IO_H
 
 #include <common/io_clients/io.h>
+
+#include <memory>
+#include <common/debug.h>
+#include <basket/common/singleton.h>
+#include <common/debug.h>
+#include <cstring>
+#include <string>
+#include <common/configuration_manager.h>
+#include <common/error_codes.h>
+#include "io.h"
+
+#ifdef ENABLE_MONGO_CLIENT
 #include <bsoncxx/json.hpp>
 #include <mongocxx/client.hpp>
 #include <mongocxx/stdx.hpp>
@@ -16,8 +28,11 @@
 #include <mongocxx/logger.hpp>
 #include <bsoncxx/stdx/make_unique.hpp>
 #include <mongocxx/exception/exception.hpp>
-#include <memory>
-#include "io.h"
+#include <mongocxx/exception/bulk_write_exception.hpp>
+#include <mongocxx/exception/query_exception.hpp>
+#include <bsoncxx/builder/stream/document.hpp>
+#include <bsoncxx/builder/stream/helpers.hpp>
+#endif
 
 class MongoIOClient: public IOClient {
 public:
@@ -25,6 +40,7 @@ public:
      * Constructor
      */
     MongoIOClient(uint16_t storage_index):IOClient(storage_index){
+#ifdef ENABLE_MONGO_CLIENT
         mongo_solution = std::static_pointer_cast<MongoSS>(solution);
         class noop_logger : public mongocxx::logger {
         public:
@@ -61,6 +77,7 @@ public:
         } catch (const mongocxx::exception& e){
             throw ErrorException(CONNECT_MONGO_SERVER_ERROR);
         }
+#endif
     }
     /*
      * Methods
@@ -81,7 +98,9 @@ public:
     size_t Size(Data &source) override;
 
 private:
+#ifdef ENABLE_MONGO_CLIENT
     mongocxx::client client;
+#endif
     std::shared_ptr<MongoSS> mongo_solution;
 };
 

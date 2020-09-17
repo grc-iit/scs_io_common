@@ -44,7 +44,7 @@
 #include <iostream>
 #include <stdarg.h>
 #include <chrono>
-#include "../interceptor/mpi.h"
+#include <mpi.h>
 #include <string>
 #include <tuple>
 

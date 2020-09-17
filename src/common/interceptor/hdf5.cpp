@@ -1,7 +1,7 @@
 //
 // Created by anthony on 12/10/16.
 //
-
+#ifdef ENABLE_HDF5_INTERCEPTION
 #include <common/interceptor/hdf5.h>
 
 hid_t H5Fopen(const char *name, unsigned flags, hid_t fapl_id) {
@@ -53,4 +53,4 @@ hid_t H5Dopen2(hid_t loc_id, const char *name, hid_t dapl_id) {
     MAP_OR_FAIL(H5Dopen2);
     return __real_H5Dopen2(loc_id, name, dapl_id);
 }
-
+#endif
