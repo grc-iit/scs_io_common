@@ -158,7 +158,7 @@ namespace common {
                                  SERVER_COUNT(1),
                                  RANDOM_SEED(100),
                                  STORAGE_SOLUTIONS(),
-                                 JOB_PATH("/home/yejie/CLionProjects/rhea/cmake-build-default/sentinel/test/unit/job"){
+                                 JOB_PATH("/home/user/rhea/job_so"){
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
             STORAGE_SOLUTIONS.insert({1, std::make_shared<RedisSS>("127.0.0.1", "6379") });
             STORAGE_SOLUTIONS.insert({2, std::make_shared<MongoSS>("mongodb://localhost:27017", "mydb", "test") });
