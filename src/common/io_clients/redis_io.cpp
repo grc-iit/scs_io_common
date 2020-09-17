@@ -11,7 +11,9 @@
 #include <common/io_clients/redis_io.h>
 
 void RedisIOClient::Read(Data &source, Data &destination) {
+
     AUTO_TRACER(std::string("RedisIOClient::Read"), source, destination);
+#ifdef ENABLE_REDIS_IOCLIENT
     try {
 
         auto resp = m_redisCluster->get(source.id_.c_str());
@@ -37,10 +39,12 @@ void RedisIOClient::Read(Data &source, Data &destination) {
         throw ErrorException(REDIS_SERVER_SIDE_FAILED);
     }
     COMMON_DBGVAR(destination);
+#endif
 }
 
 void RedisIOClient::Write(Data &source, Data &destination) {
     AUTO_TRACER("RedisIOClient::Write", source, destination);
+#ifdef ENABLE_REDIS_IOCLIENT
     try {
         auto resp = m_redisCluster->get(destination.id_.c_str());
         if (resp) {
@@ -82,17 +86,23 @@ void RedisIOClient::Write(Data &source, Data &destination) {
     } catch (const Error &err) {
         throw ErrorException(REDIS_SERVER_SIDE_FAILED);
     }
+#endif
 }
 
 bool RedisIOClient::Remove(Data &source) {
     AUTO_TRACER("RedisIOClient::Remove", source);
+#ifdef ENABLE_REDIS_IOCLIENT
     auto resp = m_redisCluster->del(source.id_.c_str());
     return true;
+#endif
 }
 
 size_t RedisIOClient::Size(Data &source) {
+    AUTO_TRACER("RedisIOClient::Size", source);
+#ifdef ENABLE_REDIS_IOCLIENT
     auto resp = m_redisCluster->get(source.id_.c_str());
     if(resp){
         return resp->size();
     }else return 0;
+#endif
 }

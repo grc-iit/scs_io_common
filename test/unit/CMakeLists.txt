@@ -6,18 +6,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${INCLUDE_DIRS}")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${INCLUDE_DIRS}")
 
 # Include directories
-include_directories(${CMAKE_SOURCE_DIR}/common/include)
-
-SET(JOB_SRC class_loader/rhea_job.cpp)
-add_library(job SHARED ${JOB_SRC})
-add_dependencies(job scs_io_common)
-target_link_libraries(job -ldl)
+include_directories(${CMAKE_SOURCE_DIR}/scs_io_common/include)
 
 # Executables
 add_executable(arg_test args/test.cpp)
-add_executable(class_loader_test class_loader/test.cpp)
-add_dependencies(class_loader_test scs_io_common)
-target_link_libraries(class_loader_test scs_io_common -ldl)
 
 # Enable tests
 option(BUILD_TEST "Build the unit tests" ON)
