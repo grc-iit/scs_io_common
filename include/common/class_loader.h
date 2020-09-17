@@ -18,28 +18,28 @@ public:
 
     template<typename T>
     std::shared_ptr<T> LoadClass(uint32_t class_id_) {
-        boost::filesystem::recursive_directory_iterator iter(COMMON_CONF->JOB_PATH);
-        boost::filesystem::recursive_directory_iterator end;
-        while (iter != end)
+        /**
+         * TODO: please test this logic. we want JOB_PATH to be a dir and we will check for the symbol in each so present in the directory.
+         * Also please calculate the cost of finding symbol in such a case.
+         */
+        using namespace boost::filesystem;
+        recursive_directory_iterator dir( COMMON_CONF->JOB_PATH.c_str()), end;
+        while (dir != end)
         {
-            error_code ec;
-            // Increment the iterator to point to next entry in recursive iteration
-            iter.increment(ec);
-            if (ec) {
-                m_job_handler = dlopen(iter->path().string().c_str(), RTLD_LAZY);
-                dlerror(); // clear error code
-                // find Job by job_id within the memory so
-                std::string job_symbol = "create_job_" + std::to_string(class_id_);
-                std::shared_ptr<T> (*create_job_fun)();
-                create_job_fun = (std::shared_ptr<T> (*)())dlsym(m_job_handler, job_symbol.c_str());
-                const char *dlsym_error = NULL;
-                if ((dlsym_error = dlerror()) != NULL){
-                    continue
-                } else {
-                    // create Job instance
-                    return create_job_fun();
-                }
+            m_job_handler = dlopen(dir->path().string().c_str(), RTLD_LAZY);
+            dlerror(); // clear error code
+            // find Job by job_id within the memory so
+            std::string job_symbol = "create_job_" + std::to_string(class_id_);
+            std::shared_ptr<T> (*create_job_fun)();
+            create_job_fun = (std::shared_ptr<T> (*)())dlsym(m_job_handler, job_symbol.c_str());
+            const char *dlsym_error = NULL;
+            if ((dlsym_error = dlerror()) != NULL){
+                continue;
+            } else {
+                // create Job instance
+                return create_job_fun();
             }
+            ++dir;
         }
         //TODO:throw exception
         return NULL;
