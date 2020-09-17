@@ -5,14 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(src)
 include_directories(include)
 
-<<<<<<< HEAD
 set(COMMON_SRC src/common/class_loader.cpp include/common/class_loader.h include/common/arguments.h include/common/debug.h
         include/common/error.h include/common/rng.h include/common/configuration_manager.h include/common/constants.h
         src/common/data_structure.cpp include/common/data_structure.h include/common/enumerations.h include/common/error.h
-=======
-set(COMMON_SRC include/common/arguments.h include/common/debug.h include/common/error.h include/common/rng.h include/common/configuration_manager.h include/common/constants.h
-        include/common/data_structure.h include/common/enumerations.h include/common/error.h
->>>>>>> 604123386a34be3bcbb00452616e746a2f1b61f4
         include/common/error_definition.h include/common/error_codes.h)
 set(IO_CLIENTS_SRC src/common/io_clients/file_io.cpp src/common/io_clients/mongo_io.cpp src/common/io_clients/redis_io.cpp
         include/common/io_clients/file_io.h include/common/io_clients/io.h include/common/io_clients/io_factory.h
