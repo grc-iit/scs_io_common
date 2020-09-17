@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(scs_io_common VERSION 1.0.0 DESCRIPTION "")
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -g -DBASKET_ENABLE_RPCLIB")
 
 include_directories(src)
 include_directories(include)
@@ -18,7 +19,6 @@ set(INTERCEPTOR_SRC src/common/interceptor/hdf5.cpp src/common/interceptor/mpi.c
 SET(CLASS_LOADER src/common/class_loader.cpp include/common/class_loader.h)
 
 add_library(scs_io_common SHARED ${COMMON_SRC} ${IO_CLIENTS_SRC} ${INTERCEPTOR_SRC} ${CLASS_LOADER})
-#add_library(scs_io_common SHARED ${COMMON_SRC} ${CLASS_LOADER})
 
 option(BUILD_TEST "Build the unit tests" ON)
 if(BUILD_TEST)
