@@ -14,7 +14,7 @@
 
 class ClassLoader {
 public:
-    ClassLoader(){}
+    ClassLoader(){ m_job_handler = nullptr; }
 
     template<typename T>
     std::shared_ptr<T> LoadClass(uint32_t class_id_) {
@@ -34,23 +34,20 @@ public:
             create_job_fun = (std::shared_ptr<T> (*)())dlsym(m_job_handler, job_symbol.c_str());
             const char *dlsym_error = NULL;
             if ((dlsym_error = dlerror()) != NULL){
+                ++dir;
                 continue;
             } else {
                 // create Job instance
                 return create_job_fun();
             }
             ++dir;
+
         }
-        //TODO:throw exception
-        return NULL;
+        throw ErrorException(NOT_FOUND_CLASS);
 
     }
 
 private:
     void* m_job_handler;
 };
-
-
-
-
 #endif //COMMON_CLASS_LOADER_H
