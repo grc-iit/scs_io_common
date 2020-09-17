@@ -13,9 +13,9 @@
 #include <rapidjson/reader.h>
 #include <regex>
 #include <boost/filesystem/operations.hpp>
-//#include <common/error_codes.h>
+#include <common/error_codes.h>
 
-#define COMMON_CONF basket::Singleton<symbios::ConfigurationManager>::GetInstance()
+#define COMMON_CONF basket::Singleton<common::ConfigurationManager>::GetInstance()
 namespace common {
     class ConfigurationManager {
 
