@@ -33,5 +33,6 @@ const ErrorCode CONNECT_MONGO_COLLECTION_ERROR = {1016, "Cannot connect to mongo
 const ErrorCode FILE_PATH_NON_EXISTANCE = {1017, "The file io path is non existance"};
 const ErrorCode INVALID_STORAGE_INDEX={1018, "Invalid storage index"};
 const ErrorCode UNDEFINED_ENV_VARIABLE = {2011, "The environment variable is not defined %s"};
+const ErrorCode NOT_FOUND_CLASS={3000, "Not found the requested class by class_id"};
 
 #endif //COMMON_ERROR_CODES_H
