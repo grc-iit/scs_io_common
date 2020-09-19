@@ -152,6 +152,8 @@ namespace common {
         std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>> STORAGE_SOLUTIONS;
         CharStruct JOB_PATH;
 
+        uint16_t REDIS_INDEX;
+
 
         ConfigurationManager() : SERVER_LISTS("/home/user/symbios/conf/server_lists/single_node_symbios_server"),
                                  CLIENT_LISTS("/home/user/symbios/conf/server_lists/single_node_symbios_client"),
@@ -161,6 +163,7 @@ namespace common {
                                  CONFIGURATION_FILE("/home/user/symbios/conf/base_symbios.conf"),
                                  SERVER_COUNT(1),
                                  RANDOM_SEED(100),
+                                 REDIS_INDEX(1),
                                  STORAGE_SOLUTIONS(),
                                  JOB_PATH("/home/user/rhea/job_so"){
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
