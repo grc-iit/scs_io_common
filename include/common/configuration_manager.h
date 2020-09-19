@@ -41,67 +41,82 @@ namespace common {
             return temp_variable;
         }
         template <typename T>
-        void config(T &doc, const char *member, uint16_t &variable) {
-            if(!doc.HasMember(member)) return;
-            assert(doc[member].IsInt());
-            variable = atoi(replaceEnvVariable(std::to_string(doc[member].GetInt())).c_str());
-        }
-        template <typename T>
-        void config(T &doc, const char *member, really_long &variable) {
-            if(!doc.HasMember(member)) return;
-            assert(doc[member].IsUint64());
-            variable = atoll(replaceEnvVariable(std::to_string(doc[member].GetUint64())).c_str());
-        }
-
-        template <typename T>
-        void config(T &doc, const char *member, std::string &variable) {
-            if(!doc.HasMember(member)) return;
-            assert(doc[member].IsString());
-            std::string temp_variable = doc[member].GetString();
-            variable = replaceEnvVariable(temp_variable);
-        }
-        template <typename T>
-        void config(T &doc, const char *member, CharStruct &variable) {
-            if(!doc.HasMember(member)) return;
-            assert(doc[member].IsString());
-            std::string temp_variable = doc[member].GetString();
-            variable = CharStruct(replaceEnvVariable(temp_variable));
-        }
-
-        void config(rapidjson::Document &doc, const char *member,
-                    std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>&variable) {
-            variable = std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>();
-            if(!doc.HasMember(member)) return;
-            rapidjson::Value& results = doc[member];
-            assert(results.IsArray());
-            for (rapidjson::SizeType i = 0; i < results.Size(); i++) {
-                std::shared_ptr<StorageSolution> ss;
-
-                if(results[i]["TYPE"] == "FILE_IO"){
-                    std::string mount;
-                    config(results[i],"MOUNT",mount);
-                    ss = static_cast<const shared_ptr<StorageSolution>>(new FileStorageSolution(mount));
-                }
-                else if(results[i]["TYPE"] == "REDIS_IO"){
-                    std::string ip;
-                    std::string port;
-                    config(results[i],"IP",ip);
-                    config(results[i],"PORT",port);
-                    ss = static_cast<const shared_ptr<StorageSolution>>(new RedisSS (ip,port));
-                }
-                else if(results[i]["TYPE"] == "MONGO_IO"){
-                    std::string ip,database,collection;
-                    config(results[i],"IP",ip);
-                    config(results[i],"DATABASE",database);
-                    config(results[i],"COLLECTION",collection);
-                    ss = static_cast<const shared_ptr<StorageSolution>>(new MongoSS(ip,database,collection));
-                }
-                else{
-                    std::cerr << "Incorrect configuration on Storage Solutions" << std::endl;
-                }
-
-                variable.insert(std::pair<uint16_t, std::shared_ptr<StorageSolution>>(i, ss));
+        void config(T (*doc), const char *member, uint16_t &variable) {
+            if(doc == NULL){
+                variable = atoi(replaceEnvVariable(std::to_string(variable)).c_str());
+            }else{
+                variable = atoi(replaceEnvVariable(std::to_string((*doc)[member].GetInt())).c_str());
             }
+        }
+        template <typename T>
+        void config(T (*doc), const char *member, really_long &variable) {
+            if(doc == NULL){
+                variable = atoll(replaceEnvVariable(std::to_string(variable)).c_str());
+            }else{
+                variable = atoll(replaceEnvVariable(std::to_string((*doc)[member].GetUint64())).c_str());
+            }
+        }
+
+        template <typename T>
+        void config(T (*doc), const char *member, std::string &variable) {
+            if(doc == NULL){
+                variable = replaceEnvVariable(variable);
+            }else{
+                std::string temp_variable = (*doc)[member].GetString();
+                variable = replaceEnvVariable(temp_variable);
+            }
+
+        }
+        template <typename T>
+        void config(T (*doc), const char *member, CharStruct &variable) {
+            if(doc == NULL){
+                variable = CharStruct(replaceEnvVariable(variable.c_str()));
+            }else{
+                std::string temp_variable = (*doc)[member].GetString();
+                variable = CharStruct(replaceEnvVariable(temp_variable));
+            }
+        }
+        template <typename T>
+        void config(T *doc, const char *member,
+                    std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>&variable) {
+
+            if(doc==NULL){
+                return;
+            }else{
+                variable = std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>();
+                rapidjson::Value& results = (*doc)[member];
+                assert(results.IsArray());
+                for (rapidjson::SizeType i = 0; i < results.Size(); i++) {
+                    std::shared_ptr<StorageSolution> ss;
+
+                    if(results[i]["TYPE"] == "FILE_IO"){
+                        std::string mount;
+                        config(&results[i],"MOUNT",mount);
+                        ss = static_cast<const shared_ptr<StorageSolution>>(new FileStorageSolution(mount));
+                    }
+                    else if(results[i]["TYPE"] == "REDIS_IO"){
+                        std::string ip;
+                        std::string port;
+                        config(&results[i],"IP",ip);
+                        config(&results[i],"PORT",port);
+                        ss = static_cast<const shared_ptr<StorageSolution>>(new RedisSS (ip,port));
+                    }
+                    else if(results[i]["TYPE"] == "MONGO_IO"){
+                        std::string ip,database,collection;
+                        config(&results[i],"IP",ip);
+                        config(&results[i],"DATABASE",database);
+                        config(&results[i],"COLLECTION",collection);
+                        ss = static_cast<const shared_ptr<StorageSolution>>(new MongoSS(ip,database,collection));
+                    }
+                    else{
+                        std::cerr << "Incorrect configuration on Storage Solutions" << std::endl;
+                    }
+
+                    variable.insert(std::pair<uint16_t, std::shared_ptr<StorageSolution>>(i, ss));
+                }
+            }
+
+
         }
 
         int CountServers(CharStruct server_list_path) {
@@ -137,7 +152,7 @@ namespace common {
             return total;
         }
 
-        virtual void LoadChildConfigurations(rapidjson::Document &doc) {
+        virtual void LoadChildConfigurations(void *doc) {
 
         }
 
@@ -175,32 +190,44 @@ namespace common {
 
 
         void LoadConfiguration() {
-
+            rapidjson::Document * doc=NULL;
             FILE *outfile = fopen(CONFIGURATION_FILE.c_str(), "r");
             if (outfile == NULL) {
                 printf("Configuration not found %s \n",CONFIGURATION_FILE.c_str());
-                exit(EXIT_FAILURE);
-            }
-            char buf[65536];
-            rapidjson::FileReadStream instream(outfile, buf, sizeof(buf));
-            rapidjson::Document doc;
-            doc.ParseStream<rapidjson::kParseStopWhenDoneFlag>(instream);
-            if (!doc.IsObject()) {
-                std::cout << "Configuration JSON is invalid" << std::endl;
+                config(doc, "SERVER_LISTS", SERVER_LISTS);
+                config(doc, "CLIENT_LISTS", CLIENT_LISTS);
+                config(doc, "SYMBIOS_PORT", SYMBIOS_PORT);
+                config(doc, "SERVER_RPC_THREADS", SERVER_RPC_THREADS);
+                config(doc, "SERVER_DIR", SERVER_DIR);
+                config(doc, "RANDOM_SEED", RANDOM_SEED);
+                config(doc, "STORAGE_SOLUTIONS", STORAGE_SOLUTIONS);
+                config(doc,"JOB_PATH", JOB_PATH);
+                boost::filesystem::create_directories(SERVER_DIR.c_str());
+                LoadChildConfigurations(doc);
+            }else{
+                char buf[65536];
+                doc = new rapidjson::Document();
+                rapidjson::FileReadStream instream(outfile, buf, sizeof(buf));
+
+                doc->ParseStream<rapidjson::kParseStopWhenDoneFlag>(instream);
+                if (!doc->IsObject()) {
+                    std::cout << "Configuration JSON is invalid" << std::endl;
+                    fclose(outfile);
+                    exit(EXIT_FAILURE);
+                }
+                config(doc, "SERVER_LISTS", SERVER_LISTS);
+                config(doc, "CLIENT_LISTS", CLIENT_LISTS);
+                config(doc, "SYMBIOS_PORT", SYMBIOS_PORT);
+                config(doc, "SERVER_RPC_THREADS", SERVER_RPC_THREADS);
+                config(doc, "SERVER_DIR", SERVER_DIR);
+                config(doc, "RANDOM_SEED", RANDOM_SEED);
+                config(doc, "STORAGE_SOLUTIONS", STORAGE_SOLUTIONS);
+                config(doc,"JOB_PATH", JOB_PATH);
+                boost::filesystem::create_directories(SERVER_DIR.c_str());
+                LoadChildConfigurations(doc);
                 fclose(outfile);
-                exit(EXIT_FAILURE);
             }
-            config(doc, "SERVER_LISTS", SERVER_LISTS);
-            config(doc, "CLIENT_LISTS", CLIENT_LISTS);
-            config(doc, "SYMBIOS_PORT", SYMBIOS_PORT);
-            config(doc, "SERVER_RPC_THREADS", SERVER_RPC_THREADS);
-            config(doc, "SERVER_DIR", SERVER_DIR);
-            config(doc, "RANDOM_SEED", RANDOM_SEED);
-            config(doc, "STORAGE_SOLUTIONS", STORAGE_SOLUTIONS);
-            config(doc,"JOB_PATH", JOB_PATH);
-            boost::filesystem::create_directories(SERVER_DIR.c_str());
-            LoadChildConfigurations(doc);
-            fclose(outfile);
+
         }
 
         void ConfigureSymbiosClient() {
