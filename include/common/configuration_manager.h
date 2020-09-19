@@ -19,8 +19,8 @@
 namespace common {
     class ConfigurationManager {
 
-    private:
-        static std::string replaceEnvVariable(std::string temp_variable){
+    protected:
+        std::string replaceEnvVariable(std::string temp_variable){
 
             std::string pattern("(\\$\\{.*?\\})");
             auto regexp = regex(pattern);
@@ -137,6 +137,10 @@ namespace common {
             return total;
         }
 
+        virtual void LoadChildConfigurations(rapidjson::Document &doc) {
+
+        }
+
     public:
         CharStruct SERVER_LISTS, CLIENT_LISTS;
         uint16_t SYMBIOS_PORT;
@@ -165,8 +169,9 @@ namespace common {
 
         }
 
+
+
         void LoadConfiguration() {
-            using namespace rapidjson;
 
             FILE *outfile = fopen(CONFIGURATION_FILE.c_str(), "r");
             if (outfile == NULL) {
@@ -174,9 +179,9 @@ namespace common {
                 exit(EXIT_FAILURE);
             }
             char buf[65536];
-            FileReadStream instream(outfile, buf, sizeof(buf));
-            Document doc;
-            doc.ParseStream<kParseStopWhenDoneFlag>(instream);
+            rapidjson::FileReadStream instream(outfile, buf, sizeof(buf));
+            rapidjson::Document doc;
+            doc.ParseStream<rapidjson::kParseStopWhenDoneFlag>(instream);
             if (!doc.IsObject()) {
                 std::cout << "Configuration JSON is invalid" << std::endl;
                 fclose(outfile);
@@ -191,7 +196,7 @@ namespace common {
             config(doc, "STORAGE_SOLUTIONS", STORAGE_SOLUTIONS);
             config(doc,"JOB_PATH", JOB_PATH);
             boost::filesystem::create_directories(SERVER_DIR.c_str());
-
+            LoadChildConfigurations(doc);
             fclose(outfile);
         }
 

@@ -20,7 +20,7 @@ set(INTERCEPTOR_SRC src/common/interceptor/hdf5.cpp src/common/interceptor/mpi.c
 SET(CLASS_LOADER include/common/class_loader.h)
 
 add_library(scs_io_common SHARED ${COMMON_SRC} ${IO_CLIENTS_SRC} ${INTERCEPTOR_SRC} ${CLASS_LOADER})
-target_link_libraries(scs_io_common -lboost_system -lboost_filesystem -ldl)
+target_link_libraries(scs_io_common -lboost_system -lboost_filesystem -ldl -lbasket)
 
 option(BUILD_TEST "Build the unit tests" ON)
 if(BUILD_TEST)

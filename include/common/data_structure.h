@@ -103,7 +103,7 @@ typedef struct MongoSS: public StorageSolution{
 typedef struct DataDistribution{
    Data source_data_; // memory buffer for write and file buffer for read
    Data destination_data_; // file info for write and memory info for read
-   uint16_t storage_index_; // native io client type
+   uint16_t storage_index_; // native io client_service type
 
    /*Define the default, copy and move constructor*/
    DataDistribution(): storage_index_(), destination_data_(), source_data_(){}

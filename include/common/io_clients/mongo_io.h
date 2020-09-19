@@ -20,7 +20,7 @@
 
 #ifdef ENABLE_MONGO_CLIENT
 #include <bsoncxx/json.hpp>
-#include <mongocxx/client.hpp>
+#include <mongocxx/client_service.hpp>
 #include <mongocxx/stdx.hpp>
 #include <mongocxx/uri.hpp>
 #include <mongocxx/instance.hpp>
@@ -48,24 +48,24 @@ public:
                                     mongocxx::stdx::string_view,
                                     mongocxx::stdx::string_view) noexcept {}
         };
-        /* Setup the MongoDB client */
+        /* Setup the MongoDB client_service */
         mongocxx::instance instance{mongocxx::stdx::make_unique<noop_logger>()};
         auto uri = mongocxx::uri{mongo_solution->end_point_.c_str()};
         try {
-            client = mongocxx::client{uri};
-            /* make sure the client is OK */
-            if (!client) {
-                fprintf(stderr, "Cannot create MongoDB client.\n");
+            client_service = mongocxx::client_service{uri};
+            /* make sure the client_service is OK */
+            if (!client_service) {
+                fprintf(stderr, "Cannot create MongoDB client_service.\n");
                 throw ErrorException(CREATE_MONGO_CLIENT_ERROR);
             }
-            mongocxx::database db = client[mongo_solution->database_.c_str()];
+            mongocxx::database db = client_service[mongo_solution->database_.c_str()];
             if (!db) {
                 fprintf(stderr, "Cannot connect to MongoDB database.\n");
                 throw ErrorException(CONNECT_MONGO_DATABASE_ERROR);
             }
             mongocxx::collection file;
             if(BASKET_CONF->MPI_RANK==0) {
-                file = client.database(mongo_solution->database_.c_str()).has_collection(mongo_solution->collection_.c_str()) ?
+                file = client_service.database(mongo_solution->database_.c_str()).has_collection(mongo_solution->collection_.c_str()) ?
                    db.collection(mongo_solution->collection_.c_str()) :
                    db.create_collection(mongo_solution->collection_.c_str());
             }
@@ -99,7 +99,7 @@ public:
 
 private:
 #ifdef ENABLE_MONGO_CLIENT
-    mongocxx::client client;
+    mongocxx::client_service client_service;
 #endif
     std::shared_ptr<MongoSS> mongo_solution;
 };
