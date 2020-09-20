@@ -180,7 +180,7 @@ namespace common {
                                  RANDOM_SEED(100),
                                  REDIS_INDEX(1),
                                  STORAGE_SOLUTIONS(),
-                                 JOB_PATH("/home/user/rhea/job_so"){
+                                 JOB_PATH("/home/jaime/CLionProjects/rhea/rhea_job/test"){
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
             STORAGE_SOLUTIONS.insert({1, std::make_shared<RedisSS>("127.0.0.1", "6379") });
             STORAGE_SOLUTIONS.insert({2, std::make_shared<MongoSS>("mongodb://localhost:27017", "mydb", "test") });

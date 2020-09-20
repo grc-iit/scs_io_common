@@ -23,10 +23,14 @@ public:
          * Also please calculate the cost of finding symbol in such a case.
          */
         using namespace boost::filesystem;
-        recursive_directory_iterator dir( COMMON_CONF->JOB_PATH.c_str()), end;
+        std::string path = COMMON_CONF->JOB_PATH.string();
+        recursive_directory_iterator dir( path.c_str()), end;
         while (dir != end)
         {
             m_job_handler = dlopen(dir->path().string().c_str(), RTLD_LAZY);
+            if(!m_job_handler){
+                printf("Could not open so");
+            }
             dlerror(); // clear error code
             // find Job by job_id within the memory so
             std::string job_symbol = "create_job_" + std::to_string(class_id_);
