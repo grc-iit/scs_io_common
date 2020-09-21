@@ -231,22 +231,6 @@ namespace common {
             }
 
         }
-
-        void ConfigureSymbiosClient() {
-            LoadConfiguration();
-            BASKET_CONF->ConfigureDefaultClient(SERVER_LISTS.c_str());
-            BASKET_CONF->RPC_PORT = SYMBIOS_PORT;
-        }
-
-        void ConfigureSymbiosServer() {
-            LoadConfiguration();
-            BASKET_CONF->RPC_THREADS = SERVER_RPC_THREADS;
-            BASKET_CONF->MEMORY_ALLOCATED = 1024ULL * 1024ULL * 1ULL;
-            BASKET_CONF->BACKED_FILE_DIR=SERVER_DIR;
-            BASKET_CONF->ConfigureDefaultServer(SERVER_LISTS.c_str());
-            SERVER_COUNT = BASKET_CONF->NUM_SERVERS;
-            BASKET_CONF->RPC_PORT = SYMBIOS_PORT;
-        }
     };
 }
 #endif //COMMON_CONFIGURATION_MANAGER_H
