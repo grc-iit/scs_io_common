@@ -14,12 +14,15 @@
 #include <regex>
 #include <boost/filesystem/operations.hpp>
 #include <common/error_codes.h>
+#include <atomic>
 
 #define COMMON_CONF basket::Singleton<common::ConfigurationManager>::GetInstance()
 
 namespace common {
 
     class ConfigurationManager {
+    private:
+        std::atomic_bool is_loaded = false;
 
     protected:
         std::string replaceEnvVariable(std::string temp_variable){
@@ -188,7 +191,8 @@ namespace common {
 
 
         ConfigurationManager(CharStruct conf) : CONFIGURATION_FILE(conf) {}
-        ConfigurationManager() : SERVER_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
+        ConfigurationManager() : is_loaded(false),
+                                 SERVER_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
                                  CLIENT_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
                                  SYMBIOS_PORT(8000),
                                  SERVER_RPC_THREADS(4),
@@ -208,6 +212,11 @@ namespace common {
 
 
         void LoadConfiguration() {
+            if(is_loaded) {
+               return;
+            } else{
+                is_loaded = true;
+            }
             rapidjson::Document * doc=NULL;
             CharStruct outfile_path=CharStruct(replaceEnvVariable(CONFIGURATION_FILE.data()));
             FILE *outfile = fopen(outfile_path.c_str(), "r");
