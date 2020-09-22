@@ -47,6 +47,9 @@ namespace common {
             if(doc == NULL){
                 variable = atoi(replaceEnvVariable(std::to_string(variable)).c_str());
             }else{
+                if(!doc->HasMember(member)) {
+                    return;
+                }
                 variable = atoi(replaceEnvVariable(std::to_string((*doc)[member].GetInt())).c_str());
             }
         }
@@ -55,6 +58,9 @@ namespace common {
             if(doc == NULL){
                 variable = atoll(replaceEnvVariable(std::to_string(variable)).c_str());
             }else{
+                if(!doc->HasMember(member)) {
+                    return;
+                }
                 variable = atoll(replaceEnvVariable(std::to_string((*doc)[member].GetUint64())).c_str());
             }
         }
@@ -64,6 +70,9 @@ namespace common {
             if(doc == NULL){
                 variable = replaceEnvVariable(variable);
             }else{
+                if(!doc->HasMember(member)) {
+                    return;
+                }
                 std::string temp_variable = (*doc)[member].GetString();
                 variable = replaceEnvVariable(temp_variable);
             }
@@ -74,6 +83,9 @@ namespace common {
             if(doc == NULL){
                 variable = CharStruct(replaceEnvVariable(variable.c_str()));
             }else{
+                if(!doc->HasMember(member)) {
+                    return;
+                }
                 std::string temp_variable = (*doc)[member].GetString();
                 variable = CharStruct(replaceEnvVariable(temp_variable));
             }
@@ -85,6 +97,9 @@ namespace common {
             if(doc==NULL){
                 return;
             }else{
+                if(!doc->HasMember(member)) {
+                    return;
+                }
                 variable = std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>();
                 rapidjson::Value& results = (*doc)[member];
                 assert(results.IsArray());
@@ -172,6 +187,7 @@ namespace common {
         uint16_t REDIS_INDEX;
 
 
+        ConfigurationManager(CharStruct conf) : CONFIGURATION_FILE(conf) {}
         ConfigurationManager() : SERVER_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
                                  CLIENT_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
                                  SYMBIOS_PORT(8000),
@@ -186,14 +202,15 @@ namespace common {
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
             STORAGE_SOLUTIONS.insert({1, std::make_shared<RedisSS>("127.0.0.1", "6379") });
             STORAGE_SOLUTIONS.insert({2, std::make_shared<MongoSS>("mongodb://localhost:27017", "mydb", "test") });
-            LoadConfiguration();
+            //LoadConfiguration();
         }
 
 
 
         void LoadConfiguration() {
             rapidjson::Document * doc=NULL;
-            FILE *outfile = fopen(CONFIGURATION_FILE.c_str(), "r");
+            CharStruct outfile_path=CharStruct(replaceEnvVariable(CONFIGURATION_FILE.data()));
+            FILE *outfile = fopen(outfile_path.c_str(), "r");
             if (outfile == NULL) {
                 printf("Configuration not found %s \n",CONFIGURATION_FILE.c_str());
                 config(doc, "SERVER_LISTS", SERVER_LISTS);
@@ -229,7 +246,6 @@ namespace common {
                 LoadChildConfigurations(doc);
                 fclose(outfile);
             }
-
         }
     };
 }
