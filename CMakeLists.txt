@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -g -DBASKET_ENABLE_RPCLIB")
 include_directories(src)
 include_directories(include)
 
-set(COMMON_SRC include/common/arguments.h include/common/debug.h
+set(COMMON_SRC include/common/arguments.h src/common/debug.cpp
         include/common/error.h include/common/rng.h include/common/configuration_manager.h include/common/constants.h
         src/common/data_structure.cpp include/common/data_structure.h include/common/enumerations.h include/common/error.h
         include/common/error_definition.h include/common/error_codes.h)
