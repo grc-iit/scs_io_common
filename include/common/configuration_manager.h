@@ -22,7 +22,7 @@ namespace common {
 
     class ConfigurationManager {
     private:
-        std::atomic_bool is_loaded = false;
+        std::atomic_bool is_loaded;
 
     protected:
         std::string replaceEnvVariable(std::string temp_variable){
@@ -189,24 +189,22 @@ namespace common {
 
         uint16_t REDIS_INDEX;
 
-
-        ConfigurationManager(CharStruct conf) : CONFIGURATION_FILE(conf) {}
-        ConfigurationManager() : is_loaded(false),
+        ConfigurationManager(CharStruct conf = "${HOME}/projects/rhea/scripts/local/base.conf") :
+                                 is_loaded(false),
                                  SERVER_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
                                  CLIENT_LISTS("${HOME}/projects/rhea/scripts/local/server_lists"),
                                  SYMBIOS_PORT(8000),
                                  SERVER_RPC_THREADS(4),
                                  SERVER_DIR("/dev/shm/rhea_dir"),
-                                 CONFIGURATION_FILE("${HOME}/projects/rhea/scripts/local/base.conf"),
+                                 CONFIGURATION_FILE(conf),
                                  SERVER_COUNT(1),
                                  RANDOM_SEED(100),
                                  REDIS_INDEX(1),
                                  STORAGE_SOLUTIONS(),
-                                 JOB_PATH("${HOME}/projects/rhea/build/rhea_job"){
+                                 JOB_PATH("${HOME}/projects/rhea/build/rhea_job") {
             STORAGE_SOLUTIONS.insert({0, std::make_shared<FileStorageSolution>("./") });
             STORAGE_SOLUTIONS.insert({1, std::make_shared<RedisSS>("127.0.0.1", "6379") });
             STORAGE_SOLUTIONS.insert({2, std::make_shared<MongoSS>("mongodb://localhost:27017", "mydb", "test") });
-            //LoadConfiguration();
         }
 
 
