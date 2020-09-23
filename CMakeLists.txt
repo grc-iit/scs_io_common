@@ -9,7 +9,7 @@ include_directories(include)
 set(COMMON_SRC include/common/arguments.h include/common/debug.h
         include/common/error.h include/common/rng.h include/common/configuration_manager.h include/common/constants.h
         src/common/data_structure.cpp include/common/data_structure.h include/common/enumerations.h include/common/error.h
-        include/common/error_definition.h include/common/error_codes.h)
+        include/common/error_definition.h include/common/error_codes.h src/common/debug.cpp)
 set(IO_CLIENTS_SRC src/common/io_clients/file_io.cpp src/common/io_clients/mongo_io.cpp src/common/io_clients/redis_io.cpp
         include/common/io_clients/file_io.h include/common/io_clients/io.h include/common/io_clients/io_factory.h
         include/common/io_clients/mongo_io.h include/common/io_clients/redis_io.h)
