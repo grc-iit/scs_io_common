@@ -44,7 +44,7 @@ void FileIOClient::Read(Data &source, Data &destination) {
 }
 
 void FileIOClient::Write(Data &source, Data &destination) {
-    AUTO_TRACER("FileIOClient::Read", source, destination);
+    AUTO_TRACER("FileIOClient::Write", source, destination);
     const char *dest_file_name = destination.id_.c_str();
     int fileFd = open(dest_file_name, O_RDWR | O_CREAT, 0644);
     if (fileFd == -1) {
