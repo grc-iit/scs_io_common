@@ -27,7 +27,7 @@ public:
         for (auto const & entry : recursive_directory_iterator(so_dir)){
             if (entry.path().extension() == ".so"){
                 auto so_file = entry.path().string();
-                m_job_handler = dlopen(so_file.c_str(), RTLD_LAZY);
+                m_job_handler = dlopen(so_file.c_str(), RTLD_LAZY | RTLD_GLOBAL);
                 if (!m_job_handler) {
                     fprintf(stderr, "%s\n", dlerror());
                 }
