@@ -196,11 +196,6 @@ namespace common {
 
 
         void LoadConfiguration() {
-            if(is_loaded) {
-               return;
-            } else{
-                is_loaded = true;
-            }
             rapidjson::Document * doc=NULL;
             CharStruct outfile_path=CharStruct(ReplaceEnvVariable(CONFIGURATION_FILE.data()));
             FILE *outfile = fopen(outfile_path.c_str(), "r");
