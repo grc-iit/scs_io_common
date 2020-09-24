@@ -32,16 +32,16 @@ public:
         }
     }
 
-    std::shared_ptr<IOClient> GetIOClient(uint16_t storage_index){
+    IOClient GetIOClient(uint16_t storage_index){
         AUTO_TRACER("IOFactory::GetIOClient", storage_index);
         auto solution = COMMON_CONF->STORAGE_SOLUTIONS[storage_index];
         switch (solution->io_client_type_){
             case IOClientType::FILE_IO:
-                return basket::Singleton<FileIOClient>::GetInstance(storage_index);
+                return FileIOClient(storage_index);
             case IOClientType::MONGO_IO:
-                return basket::Singleton<MongoIOClient>::GetInstance(storage_index);
+                return MongoIOClient(storage_index);
             case IOClientType::REDIS_IO:
-                return basket::Singleton<RedisIOClient>::GetInstance(storage_index);
+                return RedisIOClient(storage_index);
         }
     }
 };

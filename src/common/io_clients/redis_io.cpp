@@ -28,7 +28,6 @@ void RedisIOClient::Read(Data &source, Data &destination) {
                 throw ErrorException(READ_REDIS_POSITION_OR_SIZE_FAILED);
             } else {
                 // read data from Redis successful
-                destination.buffer_= static_cast<char *>(malloc(source_size - source.position_));
                 memcpy(destination.buffer_, value.c_str()+ source.position_,source_size - source.position_);
                 destination.data_size_=source_size - source.position_;
             }

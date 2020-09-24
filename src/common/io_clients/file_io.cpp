@@ -27,7 +27,6 @@ void FileIOClient::Read(Data &source, Data &destination) {
             if (source.data_size_ == 0) {
                 source_data_size = file_size - source.position_;
             }
-            destination.buffer_= static_cast<char *>(malloc(source_data_size));
             size_t data_size = read(fileFd, destination.buffer_ + destination.position_, source_data_size);
             if (data_size == source_data_size) {
                 destination.data_size_=data_size;

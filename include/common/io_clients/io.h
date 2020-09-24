@@ -27,23 +27,23 @@ public:
      /**
       * Reads data from source into destination buffer while respecting the position_
       */
-     virtual void Read(Data &source, Data &destination) = 0;
+     virtual void Read(Data &source, Data &destination){}
 
      /**
       * Writes data from source into destination buffer while respecting the position_
       *
       */
-     virtual void Write(Data &source, Data &destination) = 0;
+     virtual void Write(Data &source, Data &destination){}
     /**
      * Remove
      *
      */
-    virtual bool Remove(Data &source) = 0;
+    virtual bool Remove(Data &source){}
     /**
      * Size
      *
      */
-    virtual size_t Size(Data &source) = 0;
+    virtual size_t Size(Data &source){}
 };
 
 
