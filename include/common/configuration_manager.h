@@ -23,9 +23,8 @@ namespace common {
     class ConfigurationManager {
     private:
         std::atomic_bool is_loaded;
-
-    protected:
-        std::string replaceEnvVariable(std::string temp_variable){
+    public:
+        std::string ReplaceEnvVariable(std::string temp_variable){
 
             std::string pattern("(\\$\\{.*?\\})");
             auto regexp = regex(pattern);
@@ -45,64 +44,51 @@ namespace common {
             }
             return temp_variable;
         }
+    protected:
+
         template <typename T>
         void config(T (*doc), const char *member, uint16_t &variable) {
-            if(doc == NULL){
-                variable = atoi(replaceEnvVariable(std::to_string(variable)).c_str());
+            if(doc == NULL || !doc->HasMember(member)){
+                variable = atoi(ReplaceEnvVariable(std::to_string(variable)).c_str());
             }else{
-                if(!doc->HasMember(member)) {
-                    return;
-                }
-                variable = atoi(replaceEnvVariable(std::to_string((*doc)[member].GetInt())).c_str());
+                variable = atoi(ReplaceEnvVariable(std::to_string((*doc)[member].GetInt())).c_str());
             }
         }
         template <typename T>
         void config(T (*doc), const char *member, really_long &variable) {
-            if(doc == NULL){
-                variable = atoll(replaceEnvVariable(std::to_string(variable)).c_str());
+            if(doc == NULL || !doc->HasMember(member)){
+                variable = atoll(ReplaceEnvVariable(std::to_string(variable)).c_str());
             }else{
-                if(!doc->HasMember(member)) {
-                    return;
-                }
-                variable = atoll(replaceEnvVariable(std::to_string((*doc)[member].GetUint64())).c_str());
+                variable = atoll(ReplaceEnvVariable(std::to_string((*doc)[member].GetUint64())).c_str());
             }
         }
 
         template <typename T>
         void config(T (*doc), const char *member, std::string &variable) {
-            if(doc == NULL){
-                variable = replaceEnvVariable(variable);
+            if(doc == NULL || !doc->HasMember(member)){
+                variable = ReplaceEnvVariable(variable);
             }else{
-                if(!doc->HasMember(member)) {
-                    return;
-                }
                 std::string temp_variable = (*doc)[member].GetString();
-                variable = replaceEnvVariable(temp_variable);
+                variable = ReplaceEnvVariable(temp_variable);
             }
 
         }
         template <typename T>
         void config(T (*doc), const char *member, CharStruct &variable) {
-            if(doc == NULL){
-                variable = CharStruct(replaceEnvVariable(variable.c_str()));
+            if(doc == NULL || !doc->HasMember(member)){
+                variable = CharStruct(ReplaceEnvVariable(variable.c_str()));
             }else{
-                if(!doc->HasMember(member)) {
-                    return;
-                }
                 std::string temp_variable = (*doc)[member].GetString();
-                variable = CharStruct(replaceEnvVariable(temp_variable));
+                variable = CharStruct(ReplaceEnvVariable(temp_variable));
             }
         }
         template <typename T>
         void config(T *doc, const char *member,
                     std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>&variable) {
 
-            if(doc==NULL){
+            if(doc == NULL || !doc->HasMember(member)){
                 return;
             }else{
-                if(!doc->HasMember(member)) {
-                    return;
-                }
                 variable = std::unordered_map<uint16_t, std::shared_ptr<StorageSolution>>();
                 rapidjson::Value& results = (*doc)[member];
                 assert(results.IsArray());
@@ -216,7 +202,7 @@ namespace common {
                 is_loaded = true;
             }
             rapidjson::Document * doc=NULL;
-            CharStruct outfile_path=CharStruct(replaceEnvVariable(CONFIGURATION_FILE.data()));
+            CharStruct outfile_path=CharStruct(ReplaceEnvVariable(CONFIGURATION_FILE.data()));
             FILE *outfile = fopen(outfile_path.c_str(), "r");
             if (outfile == NULL) {
                 printf("Configuration not found %s \n",CONFIGURATION_FILE.c_str());
