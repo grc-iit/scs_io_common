@@ -125,10 +125,11 @@ namespace common {
 
         }
 
-        int CountServers(CharStruct server_list_path) {
+        std::vector<CharStruct> GetServers(CharStruct server_list_path) {
             fstream file;
             int total = 0;
             file.open(server_list_path.c_str(), ios::in);
+            auto servers =std::vector<CharStruct>();
             if (file.is_open()) {
                 std::string file_line;
                 std::string server_node_name;
@@ -146,6 +147,7 @@ namespace common {
                         }
                         // server list is list of network interfaces
                         for (int i = 0; i < count; i++) {
+                            servers.emplace_back(server_node_name);
                             total++;
                         }
                     }
@@ -155,7 +157,7 @@ namespace common {
                 exit(EXIT_FAILURE);
             }
             file.close();
-            return total;
+            return servers;
         }
 
         virtual void LoadChildConfigurations(void *doc) {
