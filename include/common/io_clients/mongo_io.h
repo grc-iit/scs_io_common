@@ -11,7 +11,6 @@
 #include <memory>
 #include <common/debug.h>
 #include <basket/common/singleton.h>
-#include <common/debug.h>
 #include <cstring>
 #include <string>
 #include <common/configuration_manager.h>

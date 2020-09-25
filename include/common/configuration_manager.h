@@ -202,7 +202,6 @@ namespace common {
             CharStruct outfile_path=CharStruct(ReplaceEnvVariable(CONFIGURATION_FILE.data()));
             FILE *outfile = fopen(outfile_path.c_str(), "r");
             if (outfile == NULL) {
-                COMMON_DBGVAR("Configuration not found " << CONFIGURATION_FILE.c_str());
                 config(doc, "SERVER_LISTS", SERVER_LISTS);
                 config(doc, "CLIENT_LISTS", CLIENT_LISTS);
                 config(doc, "SYMBIOS_PORT", SYMBIOS_PORT);

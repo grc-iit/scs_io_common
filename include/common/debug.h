@@ -47,27 +47,17 @@
 #include <mpi.h>
 #include <string>
 #include <tuple>
+#include <common/tuple_iter.h>
 
+namespace common::debug{
+#ifndef AUTO_TRACER
 #if (defined(COMMON_DEBUG_TRACE) || defined(COMMON_DEBUG_TIMER) || defined(ENABLE_AUTO_TRACER)) && !defined(DISABLE_AUTO_TRACER)
-#define AUTO_TRACER(...) common::debug::AutoTrace trace(__VA_ARGS__);
+#define AUTO_TRACER(...) common::debug::AutoTrace trace(__VA_ARGS__)
 #else
 #define AUTO_TRACER(...)
 #endif
-
-template <class Tup, class Func, std::size_t ...Is>
-constexpr void static_for_impl(Tup&& t, Func &&f, std::index_sequence<Is...> )
-{
-    ( f(std::integral_constant<std::size_t, Is>{}, std::get<Is>(t)),... );
-}
-
-template <class ... T, class Func >
-constexpr void static_for(std::tuple<T...>&t, Func &&f)
-{
-    static_for_impl(t, std::forward<Func>(f), std::make_index_sequence<sizeof...(T)>{});
-}
-
-namespace common::debug{
-    /**
+#endif
+/**
  * Handles signals and prints stack trace.
  *
  * @param sig

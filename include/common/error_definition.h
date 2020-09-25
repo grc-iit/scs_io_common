@@ -7,7 +7,7 @@
 
 #include <string>
 #include <exception>
-#include <common/debug.h>
+#include <common/tuple_iter.h>
 
 typedef struct ErrorCode{
 private:

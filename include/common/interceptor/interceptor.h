@@ -6,7 +6,6 @@
 #define COMMON_INTERCEPTOR_H
 
 
-#include <common/debug.h>
 #include <dlfcn.h>
 
 #define FILE_BUFFER_CAPACITY 4096

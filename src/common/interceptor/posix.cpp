@@ -2,6 +2,7 @@
 //// Created by jaime on 8/28/2020.
 ////
 #include <common/interceptor/posix.h>
+#include <common/debug.h>
 
 
 FILE *fopen(const char *filename, const char *mode) {
