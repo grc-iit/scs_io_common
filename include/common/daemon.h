@@ -43,14 +43,14 @@ namespace common {
                 worker = std::thread(&T::Run, daemon_manager_.get(), std::move(futureObj), this);
                 MPI_Barrier(MPI_COMM_WORLD);
                 if(BASKET_CONF->MPI_RANK == 0){
-                    printf("Running\n");
+                    //printf("Running\n");
                 }
                 if(wait_) while(true) sleep(1);
             }
             else {
                 MPI_Barrier(MPI_COMM_WORLD);
                 if(BASKET_CONF->MPI_RANK == 0){
-                    printf("Running\n");
+                    //printf("Running\n");
                 }
                 daemon_manager_->Run(std::move(futureObj), this);
             }
