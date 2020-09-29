@@ -6,7 +6,7 @@
 
 
 FILE *fopen(const char *filename, const char *mode) {
-    COMMON_DBGVAR(filename);
+    COMMON_DBGVAR(filename,filename);
     MAP_OR_FAIL(fopen);
     return __real_fopen(filename, mode);;
 }

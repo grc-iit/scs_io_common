@@ -39,7 +39,7 @@ void FileIOClient::Read(Data &source, Data &destination) {
             }
         }
     }
-    COMMON_DBGVAR(destination);
+    COMMON_DBGVAR(destination,destination);
 }
 
 void FileIOClient::Write(Data &source, Data &destination) {
@@ -55,7 +55,7 @@ void FileIOClient::Write(Data &source, Data &destination) {
         } else {
             ssize_t size = write(fileFd, source.buffer_ + source.position_,
                                  source.data_size_ - source.position_);
-            COMMON_DBGVAR(size);
+            COMMON_DBGVAR(size,size);
             if (size < source.data_size_ - source.position_) {
                 // write data to file failed
                 close(fileFd);

@@ -80,28 +80,53 @@ namespace common::debug{
  */
 
 #ifdef COMMON_DEBUG_MSG
-    #define COMMON_DBGVAR(var) \
-std::cout << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
-       << #var << " = [" << (var) << "]" << std::endl
-
-#define COMMON_DBGVAR2(var1, var2) \
-  std::cout << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
+    #define COMMON_DBGVAR(var,var1) \
+std::stringstream var;                                     \
+var << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
+       << #var1 << " = [" << (var1) << "]" << std::endl;    \
+std::cout << var.str()
+#define COMMON_DBGVAR2(var, var1, var2) \
+  std::stringstream var;    \
+  var << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
        << #var1 << " = [" << (var1) << "]"\
-       << #var2 << " = [" << (var2) << "]"  << std::endl
-#define COMMON_DBGVAR3(var1, var2, var3) \
-  std::cout << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
+       << #var2 << " = [" << (var2) << "]"  << std::endl;  \
+  std::cout << var.str()
+#define COMMON_DBGVAR3(var,var1, var2, var3) \
+  std::stringstream var;    \
+  var << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
        << #var1 << " = [" << (var1) << "]"\
        << #var2 << " = [" << (var2) << "]"\
-       << #var3 << " = [" << (var3) << "]"  << std::endl
-
-#define COMMON_DBGMSG(msg) \
-  std::cout << "DBG: " << __FILE__ << "(" << __LINE__ << ") " \
-       << msg << std::endl
+       << #var3 << " = [" << (var3) << "]"  << std::endl;          \
+  std::cout << var.str()
+#define COMMON_DBGVAR4(var,var1, var2, var3,var4) \
+  std::stringstream var;    \
+  var << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
+       << #var1 << " = [" << (var1) << "]"\
+       << #var2 << " = [" << (var2) << "]"\
+       << #var3 << " = [" << (var3) << "]" \
+       << #var4 << " = [" << (var4) << "]" << std::endl;          \
+  std::cout << var.str()
+#define COMMON_DBGVAR5(var,var1, var2, var3,var4,var5) \
+  std::stringstream var;    \
+  var << "DBG: " << __FILE__ << "(" << __LINE__ << ") "\
+       << #var1 << " = [" << (var1) << "]"\
+       << #var2 << " = [" << (var2) << "]"\
+       << #var3 << " = [" << (var3) << "]" \
+       << #var4 << " = [" << (var4) << "]" \
+       << #var5 << " = [" << (var5) << "]"<< std::endl;          \
+  std::cout << var.str()
+#define COMMON_DBGMSG(var,msg) \
+  std::stringstream var;                             \
+  var << "DBG: " << __FILE__ << "(" << __LINE__ << ") " \
+       << msg << std::endl;     \
+  std::cout << var.str()
 #else
-#define COMMON_DBGVAR(var)
-#define COMMON_DBGVAR2(var1, var2)
-#define COMMON_DBGVAR3(var1, var2, var3)
-#define COMMON_DBGMSG(msg)
+#define COMMON_DBGVAR(var,var1)
+#define COMMON_DBGVAR2(var,var1, var2)
+#define COMMON_DBGVAR3(var,var1, var2, var3)
+#define COMMON_DBGVAR4(var,var1, var2, var3,var4)
+#define COMMON_DBGVAR4(var,var1, var2, var3,var4,var5)
+#define COMMON_DBGMSG(var,msg)
 #endif
 
 /**
