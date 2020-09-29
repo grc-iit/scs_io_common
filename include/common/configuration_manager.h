@@ -54,6 +54,16 @@ namespace common {
                 variable = atoi(ReplaceEnvVariable(std::to_string((*doc)[member].GetInt())).c_str());
             }
         }
+
+        template <typename T>
+        void config(T (*doc), const char *member, uint32_t &variable) {
+            if(doc == NULL || !doc->HasMember(member)){
+                variable = atoi(ReplaceEnvVariable(std::to_string(variable)).c_str());
+            }else{
+                variable = atoi(ReplaceEnvVariable(std::to_string((*doc)[member].GetInt())).c_str());
+            }
+        }
+
         template <typename T>
         void config(T (*doc), const char *member, really_long &variable) {
             if(doc == NULL || !doc->HasMember(member)){
